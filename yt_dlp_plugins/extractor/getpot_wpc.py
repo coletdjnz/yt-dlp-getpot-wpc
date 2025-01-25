@@ -1,7 +1,10 @@
 import asyncio
 import hashlib
 import json
+import pathlib
 import time
+import nodriver
+import nodriver.core.config
 from yt_dlp import YoutubeDL
 from nodriver import start, cdp, loop
 from yt_dlp.networking._helper import select_proxy
@@ -87,15 +90,10 @@ async def mint_po_token(tab, logger, content_binding, mint_cold_start_token=Fals
     raise RequestError('Timed out waiting for WebPoClient to be ready in browser')
 
 
-async def launch_browser(proxy=None):
-    browser_args = []
-    if proxy:
-        # xxx: potentially unsafe
-        browser_args.extend([f'--proxy-server={proxy}'])
-
-    # todo: allow user to specify browser executable path or an existing nodriver browser instance
+async def launch_browser(config):
+    # todo: allow to specify an existing nodriver browser instance
     try:
-        browser = await start(headless=False, browser_args=browser_args)
+        browser = await start(config=config)
     except Exception as e:
         raise RequestError(f'failed to start browser: {e}') from e
     await browser.connection.send(cdp.storage.clear_cookies())
@@ -167,6 +165,19 @@ class WebPOClientGetPOTRH(GetPOTProvider):
     def get_config_setting(self, ie, key, casesense=True, default=None):
         return ie._configuration_arg(key, [default], ie_key=f'youtube-{self._PROVIDER_NAME}', casesense=casesense)[0]
 
+    def get_nodriver_config(self, ie, proxy=None):
+        browser_executable_path = self.get_config_setting(ie, 'browser_path', default=None)
+        browser_args = []
+        if proxy:
+            # xxx: potentially unsafe
+            browser_args.extend([f'--proxy-server={proxy}'])
+
+        return nodriver.core.config.Config(
+            headless=False,
+            browser_executable_path=browser_executable_path,
+            browser_args=browser_args
+        )
+
     def _validate_get_pot(
             self,
             client: str,
@@ -174,9 +185,19 @@ class WebPOClientGetPOTRH(GetPOTProvider):
             context=None,
             **kwargs
     ):
-        mint_player_tokens = True if self.get_config_setting(ydl.get_info_extractor('Youtube'), 'mint_player_tokens', default='True') == 'True' else False
+        ie = ydl.get_info_extractor('Youtube')
+        mint_player_tokens = True if self.get_config_setting(ie, 'mint_player_tokens', default='True') == 'True' else False
         if context == 'player' and not mint_player_tokens:
             raise UnsupportedRequest('Player PO Token minting is disabled')
+
+        # check that chrome is available
+        nodriver_config = self.get_nodriver_config(ie)
+        if not nodriver_config.browser_executable_path or not pathlib.Path(nodriver_config.browser_executable_path).exists():
+            self._logger.warning(
+                'wpc provider requires Chrome to be installed. '
+                'You can specify a path to the browser with --extractor-args "youtube-wpc:browser_path=XYZ".',
+                once=True)
+            raise UnsupportedRequest('WebPoClient requires Chrome to be installed')
 
     def _get_pot(self, client: str, ydl: YoutubeDL, visitor_data=None, data_sync_id=None, video_id=None, context=None, **kwargs) -> str:
         ie = ydl.get_info_extractor('Youtube')
@@ -187,6 +208,8 @@ class WebPOClientGetPOTRH(GetPOTProvider):
         proxy = select_proxy('https://www.youtube.com', self.proxies)
         if proxy:
             proxy = proxy.replace('socks5h', 'socks5').replace('socks4a', 'socks4')
+
+        browser_config = self.get_nodriver_config(ie, proxy)
 
         cache_content_binding = content_binding + (proxy or '')
 
@@ -199,7 +222,7 @@ class WebPOClientGetPOTRH(GetPOTProvider):
         if not self._browser or self._browser.stopped:
             self._logger.info(f'Launching youtube.com in browser to retrieve PO Token(s). '
                               f'This will stay open while yt-dlp is running. Do not close the browser window!')
-            self._browser = self._loop.run_until_complete(launch_browser(proxy=proxy))
+            self._browser = self._loop.run_until_complete(launch_browser(browser_config))
 
         self._logger.debug(f"Minting {context} PO Token using WebPoClient in browser")
         po_token = self._loop.run_until_complete(

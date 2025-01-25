@@ -16,11 +16,14 @@ Supports:
       * [Toggle caching](#toggle-caching)
       * [Set cache TTL](#set-cache-ttl)
       * [Mint Player Tokens](#mint-player-tokens)
+      * [Custom Chrome Location](#custom-chrome-location)
 <!-- TOC -->
 
 ## Installing
 
 **Requires yt-dlp `2025.01.15` or above.**
+
+Chrome or Chromium must be installed.
 
 ### pip/pipx
 
@@ -67,3 +70,9 @@ Set the cache TTL in seconds. Default is 12 hours.
 Toggle minting of Player Tokens. Default is `True`.
 
 `--extractor-args "youtube-wpc:mint_player=False"`
+
+#### Custom Chrome Location
+
+Set the location of the Chrome browser executable to use.
+
+`--extractor-args "youtube-wpc:browser_path=/usr/bin/chromium"`
