@@ -33,19 +33,19 @@ async def get_webpo_client_path(tab, logger):
 
     count = 0
     while count < 10 and not await tab.evaluate(f"!!{webpo_client_path}"):
-        logger.debug('Waiting for webPoClient to be available in browser...')
+        logger.debug('Waiting for WebPoClient to be available in browser...')
         # check that ytcfg is loaded and bg_st_hr experiment is enabled
         if not await tab.evaluate(
             f"!window.top['ytcfg']?.get('EXPERIMENT_FLAGS') || !!ytcfg.get('EXPERIMENT_FLAGS')?.bg_st_hr"
         ):
             logger.warning(
-                'bg_st_hr experiment is not enabled, webPoClient may not be available.', once=True)
+                'bg_st_hr experiment is not enabled, WebPoClient may not be available.', once=True)
 
         await asyncio.sleep(WEB_PO_BACKOFF_SECONDS)
         count += 1
 
     if count == 10:
-        logger.error('Timed out waiting for webPoClient to be available in browser')
+        logger.error('Timed out waiting for WebPoClient to be available in browser')
         return False
 
     return webpo_client_path
@@ -54,7 +54,7 @@ async def get_webpo_client_path(tab, logger):
 async def mint_po_token(tab, logger, content_binding, mint_cold_start_token=False, mint_error_token=False):
     webpo_client_path = await get_webpo_client_path(tab, logger)
     if not webpo_client_path:
-        raise RequestError('Could not find WebPO Client in browser')
+        raise RequestError('Could not find WebPoClient in browser')
 
     mws_params = {
         'c': content_binding,
@@ -80,11 +80,11 @@ async def mint_po_token(tab, logger, content_binding, mint_cold_start_token=Fals
         po_token = await tab.evaluate(mint_po_token_code, await_promise=True)
         if po_token != 'backoff':
             return po_token
-        logger.debug('Waiting for PO Token minter to be ready in browser...')
+        logger.debug('Waiting for WebPoClient to be ready in browser...')
         await asyncio.sleep(WEB_PO_BACKOFF_SECONDS)
         tries += 1
 
-    raise RequestError('Timed out waiting for PO Token minter to be ready in browser')
+    raise RequestError('Timed out waiting for WebPoClient to be ready in browser')
 
 
 async def launch_browser(proxy=None):
@@ -201,7 +201,7 @@ class WebPOClientGetPOTRH(GetPOTProvider):
                               f'This will stay open while yt-dlp is running. Do not close the browser window!')
             self._browser = self._loop.run_until_complete(launch_browser(proxy=proxy))
 
-        self._logger.debug(f"Minting {context} PO Token using YouTube's webPoClient in browser")
+        self._logger.debug(f"Minting {context} PO Token using WebPoClient in browser")
         po_token = self._loop.run_until_complete(
             mint_po_token(tab=self._browser.main_tab, logger=self._logger, content_binding=content_binding))
 
