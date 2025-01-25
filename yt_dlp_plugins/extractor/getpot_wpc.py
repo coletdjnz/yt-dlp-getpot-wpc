@@ -13,7 +13,7 @@ from yt_dlp.networking.exceptions import UnsupportedRequest, RequestError
 from yt_dlp_plugins.extractor.getpot import GetPOTProvider, register_provider, register_preference
 
 
-__version__ = '0.1'
+__version__ = '0.1.1'
 
 CACHE_STORE = 'youtube-getpot-wpc'
 CACHE_STORE_KEY = 'po_token'
