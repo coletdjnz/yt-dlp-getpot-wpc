@@ -7,7 +7,7 @@ from nodriver import start, cdp, loop
 from yt_dlp.networking._helper import select_proxy
 from yt_dlp.networking.common import Features
 from yt_dlp.networking.exceptions import UnsupportedRequest, RequestError
-from yt_dlp_plugins.extractor.getpot import GetPOTProvider, register_provider
+from yt_dlp_plugins.extractor.getpot import GetPOTProvider, register_provider, register_preference
 
 
 __version__ = '0.1'
@@ -209,3 +209,8 @@ class WebPOClientGetPOTRH(GetPOTProvider):
             self._cache_token(ie, po_token, int(time.time()) + cache_ttl, client, context, cache_content_binding)
         self._logger.debug(f'Retrieved {context} PO Token: {po_token}')
         return po_token
+
+
+@register_preference(WebPOClientGetPOTRH)
+def wpc_preference(rh, request):
+    return -100

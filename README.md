@@ -1,9 +1,9 @@
 # WebPOClient PO Token Provider
 
-An experimental [GetPOT](https://github.com/coletdjnz/yt-dlp-get-pot) PO Token Provider for yt-dlp that uses [nodriver](https://github.com/ultrafunkamsterdam/nodriver) to mint PO Tokens using YouTube's webPoClient in the web browser.
+An experimental [GetPOT](https://github.com/coletdjnz/yt-dlp-get-pot) PO Token Provider for yt-dlp that uses [nodriver](https://github.com/ultrafunkamsterdam/nodriver) and YouTube's webPoClient in the browser mint PO Tokens.
 
 Supports:
-- yt-dlp WebPO-based clients (`web`, `web_safari`,  `web_music`, `mweb` `tv`, `tv_embedded`, `web_embedded`, `web_creator`)
+- WebPO-based clients (`web`, `web_safari`, `web_music`, `mweb` `tv`, `tv_embedded`, `web_embedded`, `web_creator`)
 - Minting GVS and Player PO Tokens
 - Minting PO Tokens for both guest and logged-in sessions
 
@@ -27,6 +27,7 @@ Supports:
 ```
 pipx inject yt-dlp yt-dlp-getpot-wpc
 ```
+
 or
 
 ```
@@ -47,9 +48,6 @@ This provider will automatically be used when a PO Token is requested by yt-dlp.
 > Do not close the browser that is launched when yt-dlp is running!
 
 ### Options
-
-> [!CAUTION]
-> These options may change without warning
 
 #### Toggle caching
 
