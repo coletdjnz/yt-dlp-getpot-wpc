@@ -1,4 +1,4 @@
-# WebPOClient PO Token Provider Plugin for yt-dlp
+# WebPOClient PO Token Provider
 
 An experimental [GetPOT](https://github.com/coletdjnz/yt-dlp-get-pot) PO Token Provider for yt-dlp that uses [nodriver](https://github.com/ultrafunkamsterdam/nodriver) to mint PO Tokens using YouTube's webPoClient in the web browser.
 
@@ -8,7 +8,7 @@ Supports:
 - Minting PO Tokens for both guest and logged-in sessions
 
 <!-- TOC -->
-* [WebPOClient PO Token Provider Plugin for yt-dlp](#webpoclient-po-token-provider-plugin-for-yt-dlp)
+* [WebPOClient PO Token Provider](#webpoclient-po-token-provider)
   * [Installing](#installing)
     * [pip/pipx](#pippipx)
   * [Usage](#usage)
