@@ -13,7 +13,7 @@ from yt_dlp.networking.exceptions import UnsupportedRequest, RequestError
 from yt_dlp_plugins.extractor.getpot import GetPOTProvider, register_provider, register_preference
 
 
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 
 CACHE_STORE = 'youtube-getpot-wpc'
 CACHE_STORE_KEY = 'po_token'
@@ -191,8 +191,16 @@ class WebPOClientGetPOTRH(GetPOTProvider):
             raise UnsupportedRequest('Player PO Token minting is disabled')
 
         # check that chrome is available
-        nodriver_config = self.get_nodriver_config(ie)
-        if not nodriver_config.browser_executable_path or not pathlib.Path(nodriver_config.browser_executable_path).exists():
+        missing_browser = False
+        try:
+            nodriver_config = self.get_nodriver_config(ie)
+        except FileNotFoundError as e:
+            if 'chrome' in str(e):
+                missing_browser = True
+            else:
+                raise UnsupportedRequest(f'failed to get browser config: {e}') from e
+
+        if missing_browser or not nodriver_config.browser_executable_path or not pathlib.Path(nodriver_config.browser_executable_path).exists():
             self._logger.warning(
                 'wpc provider requires Chrome to be installed. '
                 'You can specify a path to the browser with --extractor-args "youtube-wpc:browser_path=XYZ".',
