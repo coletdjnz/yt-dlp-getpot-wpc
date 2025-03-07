@@ -69,7 +69,7 @@ Set the cache TTL in seconds. Default is 12 hours.
 
 Toggle minting of Player Tokens. Default is `True`.
 
-`--extractor-args "youtube-wpc:mint_player=False"`
+`--extractor-args "youtube-wpc:mint_player_tokens=False"`
 
 #### Custom Chrome Location
 
