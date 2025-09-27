@@ -4,15 +4,15 @@ build-backend = "hatchling.build"
 
 [project]
 name = "yt-dlp-getpot-wpc"
-version = "0.1.2"
+version = "1.0.0"
 readme = "README.md"
 requires-python = ">=3.9"
 license = { file = "LICENSE"}
-keywords = ["yt-dlp", "yt-dlp-plugin", "yt-dlp-plugins-get-pot"]
+keywords = ["yt-dlp", "yt-dlp-plugin", "yt-dlp-pot-provider"]
 authors = [
   { name = "coletdjnz", email = "coletdjnz@protonmail.com" },
 ]
-dependencies = [ "yt-dlp-get-pot", "nodriver"]
+dependencies = [ "nodriver"]
 
 [tool.hatch.env.default]
 installer = "uv"
