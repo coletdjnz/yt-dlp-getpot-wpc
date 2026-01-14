@@ -1,6 +1,6 @@
 # WebPoClient PO Token Provider
 
-An experimental yt-dlp [PO Token Provider](https://github.com/yt-dlp/yt-dlp/wiki/PO-Token-Guide#po-token-provider-plugins) that uses [nodriver](https://github.com/ultrafunkamsterdam/nodriver) and YouTube's "WebPoClient" in the browser mint PO Tokens.
+An experimental yt-dlp [PO Token Provider](https://github.com/yt-dlp/yt-dlp/wiki/PO-Token-Guide#po-token-provider-plugins) that uses [nodriver](https://github.com/ultrafunkamsterdam/nodriver) and YouTube's "WebPoClient" in the browser to mint PO Tokens.
 
 Supports:
 - WebPO-based clients (`web`, `web_safari`, `web_music`, `mweb` `tv`, `tv_embedded`, `web_embedded`, `web_creator`, ...)
