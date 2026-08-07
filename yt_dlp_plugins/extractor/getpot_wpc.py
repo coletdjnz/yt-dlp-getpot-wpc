@@ -91,6 +91,11 @@ async def launch_browser(config):
         browser = await start(config=config)
     except Exception as e:
         raise PoTokenProviderError(f'failed to start browser: {e}') from e
+    # minimize browser window
+    window_id, _ = await browser.main_tab.get_window()
+    await browser.main_tab.send(nodriver.cdp.browser.set_window_bounds(
+        window_id=window_id,
+        bounds=nodriver.cdp.browser.Bounds(window_state=nodriver.cdp.browser.WindowState.MINIMIZED)))
     await browser.cookies.clear()
     await browser.get('https://www.youtube.com?themeRefresh=1')
     return browser
