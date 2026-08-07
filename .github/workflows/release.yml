@@ -2,7 +2,7 @@ name: Create release
 on:
   push:
     tags:
-      - "*"
+      - "v*"
 
 permissions:
   contents: read
