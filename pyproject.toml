@@ -20,3 +20,6 @@ path = ".venv"
 
 [tool.hatch.build.targets.wheel]
 packages = ["yt_dlp_plugins"]
+
+[tool.hatch.build.targets.sdist]
+exclude = ["/.github"]
