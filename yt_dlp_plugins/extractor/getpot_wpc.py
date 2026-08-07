@@ -1,9 +1,10 @@
 import asyncio
 import functools
+import json
 import pathlib
 import nodriver
 import nodriver.core.config
-from nodriver import start, cdp, loop
+from nodriver import start, loop
 
 from yt_dlp.extractor.youtube.pot.provider import (
     PoTokenRequest,
@@ -13,10 +14,10 @@ from yt_dlp.extractor.youtube.pot.provider import (
     PoTokenProviderError,
     register_provider,
     register_preference,
-    ExternalRequestFeature, provider_bug_report_message,
+    ExternalRequestFeature,
+    provider_bug_report_message,
 )
 from yt_dlp.extractor.youtube.pot.utils import get_webpo_content_binding, WEBPO_CLIENTS
-import json
 
 
 __version__ = '1.0.0'
@@ -90,7 +91,7 @@ async def launch_browser(config):
         browser = await start(config=config)
     except Exception as e:
         raise PoTokenProviderError(f'failed to start browser: {e}') from e
-    await browser.connection.send(cdp.storage.clear_cookies())
+    await browser.cookies.clear()
     await browser.get('https://www.youtube.com?themeRefresh=1')
     return browser
 
