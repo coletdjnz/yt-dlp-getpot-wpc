@@ -20,7 +20,7 @@ from yt_dlp.extractor.youtube.pot.provider import (
 from yt_dlp.extractor.youtube.pot.utils import get_webpo_content_binding, WEBPO_CLIENTS
 
 
-__version__ = '1.1.0'
+__version__ = '1.1.1'
 
 WEB_PO_BACKOFF_SECONDS = 1
 
