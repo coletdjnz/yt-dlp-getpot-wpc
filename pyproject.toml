@@ -12,7 +12,7 @@ keywords = ["yt-dlp", "yt-dlp-plugin", "yt-dlp-pot-provider"]
 authors = [
   { name = "coletdjnz", email = "coletdjnz@protonmail.com" },
 ]
-dependencies = [ "nodriver==0.50.3"]
+dependencies = [ "nodriver==0.50.6"]
 
 [tool.hatch.env.default]
 installer = "uv"
